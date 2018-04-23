@@ -15,7 +15,7 @@ void server(int playerCnt) {
 	if (playerCnt < 2) { putsxy(26, 7, "                               ");	return; }
 	clientCount = playerCnt - 1;
 	//소켓통신 설정
-	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {	// (요청하고자 하는 소켓의 버전, wsadata구조체 변수의 주소값 전달) 매개변수2는 함수호출을 위해 넣어둔다는데....
+	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {	// (요청하고자 하는 소켓의 버전, wsadata구조체 변수의 주소값 전달)
 		printf("ERROR_WSA오픈에러..\n");
 		return;
 	}
@@ -25,56 +25,60 @@ void server(int playerCnt) {
 		printf("ERROR_소켓 생성 에러\n");
 		return;
 	}
-	// 소켓주소 정보 설정
+	// 소켓주소 설정
 	memset(&listen_addr, 0, sizeof(listen_addr));
 	listen_addr.sin_family = AF_INET;	//통신방싱 : TCP/IP
 	listen_addr.sin_addr.S_un.S_addr = htonl(INADDR_ANY);	// 서버 주소 설정 : 127.0.0.1(localhost)
 //	listen_addr.sin_addr.S_un.S_addr = htonl(ntohl(inet_addr(GetDefaultMyIP_str())));	// 서버 주소 설정
 	listen_addr.sin_port = htons(PORT);	// 포트 : PORT(1234)inet_ntoa(addr)
-										// 소켓 바인드
+
+	// 소켓 바인드
 	if (bind(listen_sock, (struct sockaddr*)&listen_addr, sizeof(listen_addr)) < 0) {
 		printf("ERROR_바인드 실패\n");
 		return;
 	}
-	// 소켓 리슨(클라이언트의 요청을 기다린다...)
-	if (listen(listen_sock, clientCount) < 0) {	// 최대 platerCount개의 연결까지 기다린다.....
+	// 소켓 리슨
+	if (listen(listen_sock, clientCount) < 0) {	
 		printf("ERROR_소켓 리슨 실패\n");
 		return;
 	}
 
-	mode = SERVERMODE;
+	mode = SERVERMODE;	// 게임모드 : 서버모드
 
 	// 클라이언트를 clientCount명 받음
 	clrscr();
 	printf("상대방을 기다리는중.. 현재 접속자 수: 1 / %d", clientCount + 1);
 	printf("\n내 아이피 주소 : %s", GetDefaultMyIP_str());
-	sockaddr_in_size = sizeof(connect_addr);
 
 	InitializeCriticalSection(&cs);	// 임계영역 설정
 
 	for (char i = 0; i < clientCount; i++)
 	{
-		server_sock[i] = accept(listen_sock, (SOCKADDR*)&connect_addr, &sockaddr_in_size);
+		sockaddr_in_size = sizeof(connect_addr[i]);
+		server_sock[i] = accept(listen_sock, (SOCKADDR*)&connect_addr[i], &sockaddr_in_size);	// 소켓연결이 들어올때까지 대기
 
 		if (server_sock[i] == INVALID_SOCKET)
-			printf("accept()_connect_sock[%d] error", i);
+			printf("accept()_connect_sock[%d] error", i);	// 소켓 연결 실패
+
 		client_num = i;
 		serverThread[i] = _beginthreadex(NULL, 0, (_beginthreadex_proc_type)serverRecvThread, NULL, 0, NULL);	// 쓰레드 설정
-	//	txSock2(i, strcat("I", i));
+		
 		putixy(38, 0, i + 2);//접속인원출력(클라이언트수 + 서버)
-		char msg[10] = { 0 }, pt[] = "c";
-		txSock(strcat(pt, itoa(10 * playerCnt + i + 2, msg, 10)));
+		
+		char msg[10] = { 0 };
+		txSock(strcat("c", itoa(10 * playerCnt + i + 2, msg, 10)));
 	}
 
 	//************데이터를 이제 주고받을 수 있다***************
 
 	delay(1000);
 
-	initQueueBlockes();//client에 Q를 보내기위해 게임이 실행전에 전송
-	txPlayers();
+	initQueueBlockes();	//client에 Q를 보내기위해 게임이 실행전에 전송
+	txPlayers();	// 화면에 출력하기위해 플레이어 이름을 보낸다.
+
 	char msg[1024] = { 0 };
 	msg[0] = 's';
-	for (char cnt = 3; cnt > 0; cnt--) {
+	for (char cnt = 3; cnt > 0; cnt--) {	// 3초후 게임 시작
 		msg[1] = cnt;
 
 		putsxy(20, 5, "입장완료! 게임이 [ ] 초 후에 시작합니다!!");
@@ -84,8 +88,9 @@ void server(int playerCnt) {
 		delay(1000);
 	}
 
-	txSock("start");
+	txSock("start");	//게임을 시작한다.
 	isStartGame = TRUE;
+
 	gameStart();
 
 
@@ -102,7 +107,7 @@ void server(int playerCnt) {
 void client() {
 	clrscr();
 
-	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {	// (요청하고자 하는 소켓의 버전, wsadata구조체 변수의 주소값 전달) 매개변수2는 함수호출을 위해 넣어둔다는데....
+	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {	// (요청하고자 하는 소켓의 버전, wsadata구조체 변수의 주소값 전달)
 		printf("ERROR_WSA오픈에러..\n");
 		return;
 	}
@@ -121,29 +126,31 @@ void client() {
 	client_addr.sin_port = htons(PORT);
 
 	if (connect(client_sock, (SOCKADDR*)&client_addr, sizeof(client_addr)) < 0) { //입력한 주소로 접속
-		clrscr(); setColor(RED);	putsxy(30, 10, "방 접속 실패!");	delay(2000);
-		putsxy(30, 10, "             ");
+		clrscr(); setColor(RED);	putsxy(30, 10, "방 접속 실패!");	delay(2000);	// 실패시 실패를 알린다.
+		putsxy(30, 10, "             "); 
 		closesocket(client_sock);
 		WSACleanup();
 		return;
 	}
 	 
-	mode = CLIENTMODE;
+	mode = CLIENTMODE;	// 게임모드 : 클라이언트 모드
 	InitializeCriticalSection(&cs);	// 임계영역 설정
 
 	txSock(strcat("p", myName));
 	clientThread = _beginthreadex(NULL, 0, (_beginthreadex_proc_type)clientRecvThread, NULL, 0, NULL);	// 쓰레드 설정
 	setColor(WHITE); putsxy(0, 0, "상대방을 기다리는중.. 현재 접속자 수: 0 / 0");
 
-	while (!isStartGame)	delay(10);
+	while (!isStartGame)	delay(10);	// 게임이 시작될때 까지 대기한다.
 
-	gameStart();
+	gameStart();	//게임 시작
 
-	closesocket(client_sock);
+	closesocket(client_sock);	// 소켓을 닫는다.
 	WSACleanup();
 
 }
 
+// 멀티모드 게임의 최대 인원을 선택한다.
+// 최대인원을 반환하고 취소할경우 0을 반환한다.
 int makeRoom() {
 	char clientCount[40] = "플 레 이 어(최대 4인) : ◁ 2 ▷";
 	clrscr();
@@ -178,6 +185,7 @@ int makeRoom() {
 
 }
 
+// 아이피를 문자열로 출력한다.
 char* GetDefaultMyIP_str() {
 	char localhostname[MAX_PATH];
 	IN_ADDR addr = { 0, };
@@ -200,6 +208,7 @@ char* GetDefaultMyIP_str() {
 	return	inet_ntoa(addr);
 }
 
+// 플레이어의 이름을 다른 플레이어에게 보낸다.
 void txPlayers() {
 	char msg[1024];
 	for (int i = 0; i < clientCount; i++) {
@@ -219,6 +228,7 @@ void txPlayers() {
 		send(server_sock[i], msg, (int)strlen(msg) + 1, 0);
 	}
 }
+// 소켓통신으로 데이터를 보낸다.(서버->클라이언트 // 클라이언트 -> 서버)
 void txSock(char msg[1024]) {
 	if (ISCLIENT) {
 		send(client_sock, msg, (int)strlen(msg)+1, 0);
@@ -229,7 +239,7 @@ void txSock(char msg[1024]) {
 		}
 	}
 }
-
+// 서버가 받은 블럭정보를 다른 클라이언트에게 보낸다.
 void reflexBlocks(char msg[1024], int exception) {
 
 	char reflex[1024] = { 0 };
@@ -258,6 +268,7 @@ void reflexBlocks(char msg[1024], int exception) {
 		send(server_sock[i], reflex, (int)strlen(reflex) + 1, 0);
 	}
 }
+// 서버가 받은 정보를 다른 클라이언트에게 보낸다.
 void reflex(char msg[1024], int from) {
 	for (int i = 0; i < clientCount; i++) {
 		if (i == from)	continue;
@@ -265,6 +276,7 @@ void reflex(char msg[1024], int from) {
 	}
 }
 
+// 떨어지고 있는 블럭의 정보를 보낸다.
 void txMovingBlock(int x, int y, int block, int motion) {
 	char msg[10] = { 0 };
 	msg[0] = 'B';
@@ -279,6 +291,7 @@ void txMovingBlock(int x, int y, int block, int motion) {
 
 	txSock(msg);
 }
+// 벽(stage)의 정보를 보낸다. 
 void txStageData() {
 	char txStage[1024] = { 0 };
 	txStage[0] = 'b';

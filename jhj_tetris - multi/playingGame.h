@@ -15,38 +15,39 @@ void gameStart() {
 		printStage();	// 블록이 내려오는 화면 출력(printfGameStart를 없애기 위해)
 	}
 	else {
-		txSock("ready");
-		while (readyCnt != clientCount) delay(1);
+		txSock("ready");	// 준비완료 문자를 보낸다.
+		while (readyCnt != clientCount) delay(1);	// 다른 플레이어가 준비될때까지 대기한다.
 	}
 	InitializeCriticalSection(&cs);	// 임계영역 설정
-	thread1 = _beginthreadex(NULL, 0, (_beginthreadex_proc_type)autoDownBlock, NULL, 0, NULL);	// 쓰레드 설정
-	thread2 = _beginthreadex(NULL, 0, (_beginthreadex_proc_type)listenMsg, NULL, 0, NULL);
+	thread1 = _beginthreadex(NULL, 0, (_beginthreadex_proc_type)autoDownBlock, NULL, 0, NULL);	// 시간에 따라 블럭이 떨어지는 쓰레드
+	thread2 = _beginthreadex(NULL, 0, (_beginthreadex_proc_type)listenMsg, NULL, 0, NULL);	// 점수를 표시되면 일정시간후 지워주는 쓰레드
 	playing();	// 실제로 게임이 실행
 
 
 	WaitForSingleObject(thread1, INFINITE); // 쓰레드가 종료될떄까지 대기.
 	WaitForSingleObject(thread2, INFINITE);
 
-	while (_getch() != 13) { delay(50); }
+	while (_getch() != 13) { delay(50); }	// 엔터를 누루때까지 대기
 
-	deleteQueue(blockQueue);
+	deleteQueue(blockQueue);	//큐를 제거한다.
 
 	if (ISSERVER) {
 		clrscr();
 		for (int i = 0; i < clientCount; i++) {
-			TerminateThread(serverThread[i], 0);
+			TerminateThread(serverThread[i], 0);	// 스레드 강제종료
 			WaitForSingleObject(serverThread[i], INFINITE);
 		}
 	}
 	else if (ISCLIENT) {
 		clrscr();
-		TerminateThread(clientThread, 0);
+		TerminateThread(clientThread, 0);	//스레드 강제종료
 		WaitForSingleObject(clientThread, INFINITE);
 	}
 
 	DeleteCriticalSection(&cs);	// 임계영역 종료
 }
 
+// 서버, 클라이언트를 선택하는 페이지
 void multiSetting() {
 	clrscr();
 	setColor(WHITE);	printf("사용자의 이름을 입력하세요 : ");
@@ -108,7 +109,7 @@ void multiSetting() {
 
 	}
 }
-
+// 키보드를 받아 게임이 실행되는곳이다.
 void playing() {
 	while (isStartGame || ISSINGLE) {
 
@@ -121,6 +122,7 @@ void playing() {
 	}
 }
 
+// 키보드를 받아 동작을한다.
 int PlayerMoveAction() {
 	int dx = 0, dy = 0;
 	char ch;
@@ -131,7 +133,7 @@ int PlayerMoveAction() {
 	switch (ch) {
 	case ESC:
 		if (ISSINGLE) {
-			if (pausePage() == 1) {
+			if (pausePage() == 1) {	// 게임이 종료되고 메인화면으로 이동한다.
 				TerminateThread(thread1, 0);
 				TerminateThread(thread2, 0);
 				deleteQueue(blockQueue);
@@ -140,7 +142,7 @@ int PlayerMoveAction() {
 				DeleteCriticalSection(&cs);
 				showMainPage();
 			}
-			else {
+			else {	// pausePage를 지우고 다시 게임화면으로 이동후 게임진행
 				clrscr();
 				printStage();
 				printBlockSpace();
@@ -158,13 +160,13 @@ int PlayerMoveAction() {
 	case SPACEBAR: fastDown();	break;
 	case TURNLEFT: turnBlock(isTurnMode);	break;
 	case 90: case HOLD:
-		if (ishold) holdingBlock();
+		if (ishold) holdingBlock();	// 블럭을 홀드한다.
 		ishold = FALSE;
 		break;
 
 	case RESTART:
 		if (ISSINGLE) {
-			initBlock();
+			initBlock();	
 			printGameStart();
 			while (_getch() != 13) { delay(1); }
 			printStage();
@@ -195,12 +197,13 @@ int PlayerMoveAction() {
 		break;
 
 	}
-	if (dx != 0 || dy != 0) moveBlock(dx, dy);
+	if (dx != 0 || dy != 0) moveBlock(dx, dy);	// x, y 방향으로 이동했다면 블럭을 움직인다.
 	LeaveCriticalSection(&cs);
 
 }
 
-void checkScore() {
+// 점수에 따라 블럭이 떨어지는 속도를 바꾼다.
+void checkScore() {	
 	if (score < 1000) leveltime = 1000;
 	else if (score < 2500) leveltime = 800;
 	else if (score < 4000) leveltime = 600;
@@ -209,6 +212,7 @@ void checkScore() {
 	else if (score < 10000) leveltime = 150;
 }
 
+// 블럭을 맨아래로 이동한다.
 void fastDown() {
 	while (isBlockCreated) {
 		moveBlock(0, 1);
