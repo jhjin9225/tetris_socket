@@ -150,13 +150,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="basic.h" />
-    <ClInclude Include="multiModeSetting.h" />
+    <ClInclude Include="SelectMulMode.h" />
     <ClInclude Include="blockes.h" />
     <ClInclude Include="pages.h" />
     <ClInclude Include="initalize.h" />
     <ClInclude Include="interface.h" />
     <ClInclude Include="queue.h" />
-    <ClInclude Include="playingGame.h" />
+    <ClInclude Include="PlayingGame.h" />
     <ClInclude Include="thread.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

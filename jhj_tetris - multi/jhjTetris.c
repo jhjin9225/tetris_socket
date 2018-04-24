@@ -142,7 +142,7 @@ void printTETRIS() {
 	putsxy(26, 16, menus[2]);
 	putsxy(26, 18, menus[3]);
 	setColor(WHITE);
-	putsxy(65, 21, "made by SOMA, JHJ");
+	putsxy(55, 21, "made by SOMA, JHJ");
 }
 
 void initMain() {

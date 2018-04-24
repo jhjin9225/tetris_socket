@@ -42,10 +42,10 @@
     <ClInclude Include="initalize.h">
       <Filter>헤더 파일\functions</Filter>
     </ClInclude>
-    <ClInclude Include="playingGame.h">
+    <ClInclude Include="SelectMulMode.h">
       <Filter>헤더 파일\mode</Filter>
     </ClInclude>
-    <ClInclude Include="multiModeSetting.h">
+    <ClInclude Include="PlayingGame.h">
       <Filter>헤더 파일\mode</Filter>
     </ClInclude>
   </ItemGroup>
