@@ -1,7 +1,0 @@
-﻿  jhj_tetris.c
-c:\users\20104\desktop\새 폴더 (2)\jhj_tetris - 복사본\gamemode.h(15): warning C4047: '=': 'HANDLE'의 간접 참조 수준이 'uintptr_t'과(와) 다릅니다.
-c:\users\20104\desktop\새 폴더 (2)\jhj_tetris - 복사본\gamemode.h(16): warning C4047: '=': 'HANDLE'의 간접 참조 수준이 'uintptr_t'과(와) 다릅니다.
-c:\users\20104\desktop\새 폴더 (2)\jhj_tetris - 복사본\queue.h(90): warning C4716: 'enQueue': 값을 반환해야 합니다.
-c:\users\20104\desktop\새 폴더 (2)\jhj_tetris - 복사본\pages.h(168): warning C4715: 'pausePage': 모든 제어 경로에서 값을 반환하지는 않습니다.
-c:\users\20104\desktop\새 폴더 (2)\jhj_tetris - 복사본\gamemode.h(106): warning C4716: 'PlayerMoveAction': 값을 반환해야 합니다.
-  jhj_tetris.vcxproj -> C:\Users\20104\Desktop\새 폴더 (2)\jhj_tetris - 복사본\x64\Debug\jhj_tetris.exe

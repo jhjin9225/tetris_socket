@@ -40,7 +40,6 @@ void initGame() {
 
 // 블럭을 초기화한다.
 void initBlock() {
-	stageData[0][0] = 7;
 	memcpy(stage, stageData, sizeof(stage));
 	save_x = STARTX;
 	save_y = STARTY;
@@ -54,10 +53,10 @@ void initBlock() {
 
 // 생성될 블럭들을 Queue에 담아 초기화한다.
 void initQueueBlockes() {
-	if (ISSINGLE) {
-		blockQueue = createQueue(Q_MAX);	
+	if(blockQueue == NULL)	blockQueue = createQueue(Q_MAX);	
 
-		for (int i = 0; i < Q_MAX; i++) {
+	if (ISSINGLE) {
+		for (int i = 0; i < Q_FILL_SIZE; i++) {
 			newBlock.element = random(7);	//랜덤으로 블록을 지정해 큐에 저장한다.
 			enQueue(blockQueue, newBlock);
 		}
@@ -65,9 +64,8 @@ void initQueueBlockes() {
 	else if (ISSERVER) {
 		char msg[1024] = { 0 };
 		msg[0] = 'Q'; 
-		blockQueue = createQueue(Q_MAX);
 
-		for (int i = 0; i < Q_MAX; i++) {
+		for (int i = 0; i < Q_FILL_SIZE; i++) {
 			newBlock.element = random(7);	//랜덤으로 블록을 지정해 큐에 저장한다.
 			enQueue(blockQueue, newBlock);
 			msg[i + 1] = newBlock.element + 0x30;

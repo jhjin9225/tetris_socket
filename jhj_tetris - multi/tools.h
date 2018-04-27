@@ -9,7 +9,6 @@
 #endif
 #include <process.h>
 
-
 #ifndef __xlinux__
 #pragma comment(lib,"ws2_32.lib")
 #include<WinSock2.h>
@@ -75,8 +74,8 @@
 #define ISCLIENT (mode==1)
 #define ISSINGLE (mode==2)
 
-#define Q_MAX	200
-#define Q_REFILL_SIZE	Q_MAX / 4
+#define Q_MAX	10
+#define Q_FILL_SIZE	Q_MAX / 2
 
 //==========================================================================//
 
@@ -113,7 +112,7 @@ ArrayQueueNode* deQueue(ArrayQueue* Queue);
 int enQueue(ArrayQueue* Queue, ArrayQueueNode element);
 int isQueueFull(ArrayQueue* Queue);
 int isQueueEmpty(ArrayQueue* Queue);
-void deleteQueue(ArrayQueue* Queue);
+ArrayQueue *deleteQueue(ArrayQueue* Queue);
 ArrayQueueNode* peek(ArrayQueue *Queue);
 
 //interface.h

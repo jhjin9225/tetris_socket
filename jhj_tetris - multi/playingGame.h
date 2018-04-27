@@ -1,6 +1,6 @@
 #pragma once
 #include "tools.h"
-#include "multiModeSetting.h"
+#include "SelectMulMode.h"
 
 
 #define PORT 1234
@@ -8,7 +8,7 @@
 void gameStart() {
 
 	initGame();	// 게임실행 기본설정
-
+	
 	if (ISSINGLE) {
 		printGameStart();	// 게임 대기화면 출력
 		getchar();	// 엔터를 누를때까지 대기
@@ -19,8 +19,8 @@ void gameStart() {
 		while (readyCnt != clientCount) delay(1);	// 다른 플레이어가 준비될때까지 대기한다.
 	}
 	InitializeCriticalSection(&cs);	// 임계영역 설정
-	thread1 = _beginthreadex(NULL, 0, (_beginthreadex_proc_type)autoDownBlock, NULL, 0, NULL);	// 시간에 따라 블럭이 떨어지는 쓰레드
-	thread2 = _beginthreadex(NULL, 0, (_beginthreadex_proc_type)listenMsg, NULL, 0, NULL);	// 점수를 표시되면 일정시간후 지워주는 쓰레드
+	thread1 = (HANDLE)_beginthreadex(NULL, 0, (_beginthreadex_proc_type)autoDownBlock, NULL, 0, NULL);	// 시간에 따라 블럭이 떨어지는 쓰레드
+	thread2 = (HANDLE)_beginthreadex(NULL, 0, (_beginthreadex_proc_type)listenMsg, NULL, 0, NULL);	// 점수를 표시되면 일정시간후 지워주는 쓰레드
 	playing();	// 실제로 게임이 실행
 
 
@@ -29,7 +29,7 @@ void gameStart() {
 
 	while (_getch() != 13) { delay(50); }	// 엔터를 누루때까지 대기
 
-	deleteQueue(blockQueue);	//큐를 제거한다.
+	blockQueue = deleteQueue(blockQueue);	//큐를 제거한다.
 
 	if (ISSERVER) {
 		clrscr();
@@ -136,7 +136,7 @@ int PlayerMoveAction() {
 			if (pausePage() == 1) {	// 게임이 종료되고 메인화면으로 이동한다.
 				TerminateThread(thread1, 0);
 				TerminateThread(thread2, 0);
-				deleteQueue(blockQueue);
+				blockQueue = deleteQueue(blockQueue);
 				isStartGame = FALSE;
 				LeaveCriticalSection(&cs);
 				DeleteCriticalSection(&cs);

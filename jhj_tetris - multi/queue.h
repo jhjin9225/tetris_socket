@@ -59,7 +59,6 @@ ArrayQueueNode *deQueue(ArrayQueue* Queue) {
 }
 // 큐에 값을 저장한다.
 int enQueue(ArrayQueue* Queue, ArrayQueueNode element) {
-	int ret = FALSE;
 	int i = 0;
 
 	if (Queue != NULL) {
@@ -97,13 +96,16 @@ int isQueueEmpty(ArrayQueue* Queue) {
 	return ret;
 }
 // 큐를 삭제한다.
-void deleteQueue(ArrayQueue* Queue) {
+ArrayQueue *deleteQueue(ArrayQueue* Queue) {
 	if (Queue != NULL) {
 		if (Queue->pElement != NULL) {
 			free(Queue->pElement);
+			Queue->pElement = NULL;
 		}
 		free(Queue);
+		Queue = NULL;
 	}
+	return Queue;
 }
 // 큐의 최하단의 값을 가져온다.(큐의 노드 수는 변하지 않는다.)
 ArrayQueueNode *peek(ArrayQueue *Queue) {

@@ -20,9 +20,10 @@ char menus[4][30] = {
 
 
 int main(void) {
+	
 	initMain();
 	showMainPage();
-
+	
 	return 0;
 }
 

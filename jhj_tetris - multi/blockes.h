@@ -75,8 +75,8 @@ void turnBlock(boolean isRight) {
 void createNewBlock() {
 	if (isQueueEmpty(blockQueue)) {	// 큐가 비어있다면 Q_REFILL_SIZE만큼 블럭을 큐에 넣어준다.
 		char msg[1024] = { 0 };
-		msg[0] = 'q';
-		for (int i = 0; i < Q_REFILL_SIZE; i++) {
+		msg[0] = 'Q';
+		for (int i = 0; i < Q_FILL_SIZE; i++) {
 			newBlock.element = random(7);
 			enQueue(blockQueue, newBlock);
 			if (!ISSINGLE)	msg[i + 1] = newBlock.element + 0x30;	// 멀티모드일경우(싱글모드가 아닐경우)에는 서버에게 큐 데이터를 보낸다.

@@ -28,8 +28,8 @@ void server(int playerCnt) {
 	// 소켓주소 설정
 	memset(&listen_addr, 0, sizeof(listen_addr));
 	listen_addr.sin_family = AF_INET;	//통신방싱 : TCP/IP
-	listen_addr.sin_addr.S_un.S_addr = htonl(INADDR_ANY);	// 서버 주소 설정 : 127.0.0.1(localhost)
-//	listen_addr.sin_addr.S_un.S_addr = htonl(ntohl(inet_addr(GetDefaultMyIP_str())));	// 서버 주소 설정
+//	listen_addr.sin_addr.S_un.S_addr = htonl(INADDR_ANY);	// 서버 주소 설정 : 127.0.0.1(localhost)
+	listen_addr.sin_addr.S_un.S_addr = htonl(ntohl(inet_addr(GetDefaultMyIP_str())));	// 서버 주소 설정
 	listen_addr.sin_port = htons(PORT);	// 포트 : PORT(1234)inet_ntoa(addr)
 
 	// 소켓 바인드
@@ -61,23 +61,23 @@ void server(int playerCnt) {
 			printf("accept()_connect_sock[%d] error", i);	// 소켓 연결 실패
 
 		client_num = i;
-		serverThread[i] = _beginthreadex(NULL, 0, (_beginthreadex_proc_type)serverRecvThread, NULL, 0, NULL);	// 쓰레드 설정
+		serverThread[i] = (HANDLE)_beginthreadex(NULL, 0, (_beginthreadex_proc_type)serverRecvThread, NULL, 0, NULL);	// 쓰레드 설정
 		
 		putixy(38, 0, i + 2);//접속인원출력(클라이언트수 + 서버)
 		
 		char msg[10] = { 0 };
-		txSock(strcat("c", itoa(10 * playerCnt + i + 2, msg, 10)));
+		txSock(strcat("c", _itoa(10 * playerCnt + i + 2, msg, 10)));
 	}
 
-	//************데이터를 이제 주고받을 수 있다***************
-
-	delay(1000);
+	//************소켓 기본설정 완료***************
 
 	initQueueBlockes();	//client에 Q를 보내기위해 게임이 실행전에 전송
 	txPlayers();	// 화면에 출력하기위해 플레이어 이름을 보낸다.
 
 	char msg[1024] = { 0 };
 	msg[0] = 's';
+
+	delay(1000);
 	for (char cnt = 3; cnt > 0; cnt--) {	// 3초후 게임 시작
 		msg[1] = cnt;
 
@@ -118,8 +118,8 @@ void client() {
 		return;
 	}
 
-	//	printf("아이피주소를 입력하세요 : ");	scanf("%s", &ip);
-	strcpy(ip, "127.0.0.1");
+	printf("서버의 아이피주소를 입력하세요 : ");	scanf("%s", &ip);
+//	strcpy(ip, GetDefaultMyIP_str());
 	memset(&client_addr, 0, sizeof(client_addr));
 	client_addr.sin_family = AF_INET;
 	client_addr.sin_addr.s_addr = inet_addr(ip);
@@ -137,7 +137,7 @@ void client() {
 	InitializeCriticalSection(&cs);	// 임계영역 설정
 
 	txSock(strcat("p", myName));
-	clientThread = _beginthreadex(NULL, 0, (_beginthreadex_proc_type)clientRecvThread, NULL, 0, NULL);	// 쓰레드 설정
+	clientThread = (HANDLE)_beginthreadex(NULL, 0, (_beginthreadex_proc_type)clientRecvThread, NULL, 0, NULL);	// 쓰레드 설정
 	setColor(WHITE); putsxy(0, 0, "상대방을 기다리는중.. 현재 접속자 수: 0 / 0");
 
 	while (!isStartGame)	delay(10);	// 게임이 시작될때 까지 대기한다.
@@ -205,7 +205,7 @@ char* GetDefaultMyIP_str() {
 		ptr++;
 	}
 
-	return	inet_ntoa(addr);
+	return	inet_ntoa(addr);	// 주소를 문자열로 변환한다.
 }
 
 // 플레이어의 이름을 다른 플레이어에게 보낸다.
@@ -264,7 +264,7 @@ void reflexBlocks(char msg[1024], int exception) {
 	for (int i = 0; i < clientCount; i++) {
 		if (i == exception)	continue;
 
-		sprintf(reflex, "%s%s%s", msg, "R", itoa(location[idx++], tmp, 10));
+		sprintf(reflex, "%s%s%s", msg, "R", _itoa(location[idx++], tmp, 10));
 		send(server_sock[i], reflex, (int)strlen(reflex) + 1, 0);
 	}
 }

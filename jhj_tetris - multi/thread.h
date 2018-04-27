@@ -97,12 +97,12 @@ void serverRecvThread() {
 				reflex("ready", client_index);	
 				readyCnt++;
 			}
-			else if (msg[0] == 'q') {	// 최조 입력한 큐가 떨어지게 되면 큐정보를 보내어 추가해준다.
+			else if (msg[0] == 'Q') {	// 최조 입력한 큐가 떨어지게 되면 큐정보를 보내어 추가해준다.
 				reflex(msg, client_index);
 
-				if (isStartGame == TRUE) {
+				if (isStartGame == TRUE) {	// isStart --> 게임오버가 되면 큐를 안받음
 					EnterCriticalSection(&cs);
-					for (int i = 0; i < Q_REFILL_SIZE; i++) {
+					for (int i = 0; i < Q_FILL_SIZE; i++) {
 						newBlock.element = msg[i + 1] - 0x30;
 						enQueue(blockQueue, newBlock);
 					}
@@ -113,7 +113,7 @@ void serverRecvThread() {
 				strcpy(playerName[client_index], msg + 1);
 			}
 
-			buf_idx = buf_idx + strlen(buff + buf_idx) + 1;	// buf의 다음 문자열의 첫글자 선택
+			buf_idx = buf_idx + (int)strlen(buff + buf_idx) + 1;	// buf의 다음 문자열의 첫글자 선택
 		}
 		memset(msg, 0, sizeof(msg));	// 초기화
 		memset(buff, 0, sizeof(buff));
@@ -214,27 +214,23 @@ void clientRecvThread() {
 				putixy(38, 5, msg[1]);
 			}
 			else if (msg[0] == 'Q') {	// 서버에서 블럭 큐를 받아 저장한다.
+				int isNew = FALSE;
 
-				blockQueue = createQueue(Q_MAX);
+				if (blockQueue == NULL) {
+					blockQueue = createQueue(Q_MAX);
+					isNew = TRUE;
+				}
 
 				EnterCriticalSection(&cs);
-				for (int i = 0; i < Q_MAX; i++) {
-					newBlock.element = msg[i + 1] - 0x30;
-					enQueue(blockQueue, newBlock);
-				}
-				LeaveCriticalSection(&cs);
-
-				isRecvQ = TRUE;
-			}
-			else if (msg[0] == 'q') {	// 상대방이 큐가 부족하면 다시 채워준다.
-				if (isStartGame == TRUE) {
-					EnterCriticalSection(&cs);
-					for (int i = 0; i < Q_REFILL_SIZE; i++) {
+				if (isStartGame == TRUE || isNew) {	// isStart --> 게임오버가 되면 큐를 안받음, isNew --> 최초 1회는 게임 시작과 상관없이 큐를 받음
+					for (int i = 0; i < Q_FILL_SIZE; i++) {
 						newBlock.element = msg[i + 1] - 0x30;
 						enQueue(blockQueue, newBlock);
 					}
 					LeaveCriticalSection(&cs);
 				}
+				isRecvQ = TRUE;
+				isNew = FALSE;
 			}
 			else if (strcmp(msg, "ILOOSE") == 0) {	// 상대방이 게임오버가 될때마다 1씩 증가하여 다른플래이어가 모두 패배하면 승리하게된다.
 				winCnt++;
@@ -256,11 +252,11 @@ void clientRecvThread() {
 				}
 				while (strlen(msg + point) != 0) {
 					strcpy(playerName[cnt++], msg + point);
-					point = point + strlen(msg + point) + 1;
+					point = point + (int)strlen(msg + point) + 1;
 				}
 			}
 		
-			buf_idx = buf_idx + strlen(buff + buf_idx) + 1;
+			buf_idx = buf_idx + (int)strlen(buff + buf_idx) + 1;
 		}
 		memset(msg, 0, sizeof(msg));	// 초기화
 		memset(buff, 0, sizeof(buff));
