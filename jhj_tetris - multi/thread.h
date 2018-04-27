@@ -25,7 +25,7 @@ void serverRecvThread() {
 		int buf_idx = 0;	// buff에 담긴 문자열중 맨첫번재 문자열을 가리킴.
 		while (strlen(buff + buf_idx) != 0) {
 			strcpy_s(msg, 1024, buff + buf_idx);
-
+			
 			if (msg[0] == 'b') {
 				reflexBlocks(msg, client_index); // 클라이언트에서 받은 메세지를 다른 클라이언트에게 전송
 
