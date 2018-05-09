@@ -119,7 +119,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
-      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;_CRT_SECURE_NO_WARNINGS;_WINSOCK_DEPRECATED_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
     </ClCompile>
     <Link>
@@ -145,19 +145,37 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="jhjTetris.c" />
-    <ClCompile Include="tools.h" />
+    <ClCompile Include="Tetris_Main.c" />
+    <ClInclude Include="Tetris_Header.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="basic.h" />
-    <ClInclude Include="SelectMulMode.h" />
-    <ClInclude Include="blockes.h" />
-    <ClInclude Include="pages.h" />
-    <ClInclude Include="initalize.h" />
-    <ClInclude Include="interface.h" />
-    <ClInclude Include="queue.h" />
-    <ClInclude Include="PlayingGame.h" />
-    <ClInclude Include="thread.h" />
+    <ClCompile Include="basic.c">
+      <FileType>CppCode</FileType>
+    </ClCompile>
+    <ClCompile Include="SelectMulMode.c">
+      <FileType>CppCode</FileType>
+    </ClCompile>
+    <ClCompile Include="blockes.c">
+      <FileType>CppCode</FileType>
+    </ClCompile>
+    <ClCompile Include="pages.c">
+      <FileType>CppCode</FileType>
+    </ClCompile>
+    <ClCompile Include="initalize.c">
+      <FileType>CppCode</FileType>
+    </ClCompile>
+    <ClCompile Include="interface.c">
+      <FileType>CppCode</FileType>
+    </ClCompile>
+    <ClCompile Include="queue.c">
+      <FileType>CppCode</FileType>
+    </ClCompile>
+    <ClCompile Include="PlayingGame.c">
+      <FileType>CppCode</FileType>
+    </ClCompile>
+    <ClCompile Include="thread.c">
+      <FileType>CppCode</FileType>
+    </ClCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

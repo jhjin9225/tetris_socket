@@ -13,48 +13,42 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="헤더 파일\mode">
-      <UniqueIdentifier>{55210069-4626-4b5b-b46b-b321de541620}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="헤더 파일\functions">
-      <UniqueIdentifier>{6909b89d-effe-473e-a374-1ec1813b5d8f}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="thread.h">
-      <Filter>헤더 파일\functions</Filter>
-    </ClInclude>
-    <ClInclude Include="basic.h">
-      <Filter>헤더 파일\functions</Filter>
-    </ClInclude>
-    <ClInclude Include="queue.h">
-      <Filter>헤더 파일\functions</Filter>
-    </ClInclude>
-    <ClInclude Include="interface.h">
-      <Filter>헤더 파일\functions</Filter>
-    </ClInclude>
-    <ClInclude Include="pages.h">
-      <Filter>헤더 파일\functions</Filter>
-    </ClInclude>
-    <ClInclude Include="blockes.h">
-      <Filter>헤더 파일\functions</Filter>
-    </ClInclude>
-    <ClInclude Include="initalize.h">
-      <Filter>헤더 파일\functions</Filter>
-    </ClInclude>
-    <ClInclude Include="SelectMulMode.h">
-      <Filter>헤더 파일\mode</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayingGame.h">
-      <Filter>헤더 파일\mode</Filter>
+    <ClInclude Include="Tetris_Header.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="jhjTetris.c">
+    <ClCompile Include="Tetris_Main.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="tools.h">
-      <Filter>헤더 파일\functions</Filter>
+    <ClCompile Include="basic.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="blockes.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="initalize.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="interface.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="pages.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayingGame.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="queue.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="SelectMulMode.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="thread.c">
+      <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>
