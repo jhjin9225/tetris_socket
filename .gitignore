@@ -287,4 +287,8 @@ __pycache__/
 *.odx.cs
 *.xsd.cs
 
-jhj_tetris - multi/.vs
+jhj_tetris - multi/.vs/
+jhj_tetris - multi/jhj_tetris.sln
+jhj_tetris - multi/jhj_tetris.vcxproj
+jhj_tetris - multi/jhj_tetris.vcxproj.filters
+jhj_tetris - multi/jhj_tetris.vcxproj.user
