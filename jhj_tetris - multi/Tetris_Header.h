@@ -75,7 +75,7 @@
 #define ISCLIENT (mode==1)
 #define ISSINGLE (mode==2)
 
-#define Q_MAX	10
+#define Q_MAX	200
 #define Q_FILL_SIZE	Q_MAX / 2
 
 
@@ -100,9 +100,9 @@ typedef enum { NOCURSOR, SOLIDCURSOR, NORMALCURSOR } CURSOR_TYPE;
 //============구조체, 열거형============//
 
 //basic.h
-void putixy(int x, int y, const int d);
-void putsxy(int x, int y, const char* c);
-void putchxy(int x, int y, const char c);
+void putixy(int x, int y, int d);
+void putsxy(int x, int y, char* c);
+void putchxy(int x, int y, char c);
 void clrscr();
 void gotoxy(int x, int y);
 void setcursortype(CURSOR_TYPE c);
@@ -182,7 +182,7 @@ void client();
 int makeRoom();
 char* GetDefaultMyIP_str();
 void txPlayers();
-void txSock(const char msg[1024]);
+void txSock(char msg[1024]);
 void reflexBlocks(char msg[1024], int exception);
 void reflex(char msg[1024], int from);
 void txMovingBlock(int x, int y, int block, int motion);

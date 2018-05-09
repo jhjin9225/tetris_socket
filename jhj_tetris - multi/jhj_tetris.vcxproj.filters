@@ -15,40 +15,40 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Tetris_Header.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Tetris_Main.c">
+    <ClCompile Include="Basic.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="basic.c">
+    <ClCompile Include="Blockes.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="blockes.c">
+    <ClCompile Include="Initalize.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="initalize.c">
+    <ClCompile Include="Interface.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="interface.c">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="pages.c">
+    <ClCompile Include="Pages.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="PlayingGame.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="queue.c">
+    <ClCompile Include="Queue.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="SelectMulMode.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="thread.c">
+    <ClCompile Include="Tetris_Main.c">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="Thread.c">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Tetris_Header.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

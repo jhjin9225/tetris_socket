@@ -72,8 +72,9 @@ void server(int playerCnt) {
 		
 		putixy(38, 0, i + 2);//접속인원출력(클라이언트수 + 서버)
 		
-		char msg[10] = { 0 };
-		txSock(strcat((char*)"c", _itoa(10 * playerCnt + i + 2, msg, 10)));
+		char msg[1024] = { 0 };	sprintf(msg, "%s%d", "c", 10 * playerCnt + i + 2);
+		txSock(msg);
+
 	}
 
 	//************소켓 기본설정 완료***************
@@ -126,8 +127,8 @@ void client() {
 		return;
 	}
 
-	printf("서버의 아이피주소를 입력하세요 : ");	scanf("%s", &ip);
-//	strcpy(ip, GetDefaultMyIP_str());
+	setColor(WHITE);	printf("서버의 아이피주소를 입력하세요 : ");	scanf("%s", &ip);
+
 	memset(&client_addr, 0, sizeof(client_addr));
 	client_addr.sin_family = AF_INET;
 	client_addr.sin_addr.s_addr = inet_addr(ip);
@@ -144,8 +145,11 @@ void client() {
 	mode = CLIENTMODE;	// 게임모드 : 클라이언트 모드
 	InitializeCriticalSection(&cs);	// 임계영역 설정
 
-	txSock(strcat((char*)"p", myName));
+	char msg_tmp[1024];	sprintf(msg_tmp, "%s%s", "p", myName);
+	txSock(msg_tmp);
+
 	clientThread = (HANDLE)_beginthreadex(NULL, 0, (_beginthreadex_proc_type)clientRecvThread, NULL, 0, NULL);	// 쓰레드 설정
+	putsxy(0, 0, "                                                                     ");
 	setColor(WHITE); putsxy(0, 0, "상대방을 기다리는중.. 현재 접속자 수: 0 / 0");
 
 	while (!isStartGame)	delay(10);	// 게임이 시작될때 까지 대기한다.
@@ -199,7 +203,7 @@ char* GetDefaultMyIP_str() {
 
 	if (gethostname(localhostname, MAX_PATH) == SOCKET_ERROR)//호스트 이름 얻어오기
 	{
-		return (char*)"호스트이름오류";
+		return "호스트이름오류";
 	}
 	HOSTENT *ptr = gethostbyname(localhostname);//호스트 엔트리 얻어오기
 	while (ptr && ptr->h_name)
@@ -237,7 +241,7 @@ void txPlayers() {
 }
 
 // 소켓통신으로 데이터를 보낸다.(서버->클라이언트 // 클라이언트 -> 서버)
-void txSock(const char msg[1024]) {
+void txSock(char msg[1024]) {
 	if (ISCLIENT) {
 		send(client_sock, msg, (int)strlen(msg)+1, 0);
 	}

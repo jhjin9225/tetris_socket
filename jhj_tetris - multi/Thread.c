@@ -108,7 +108,7 @@ void serverRecvThread() {
 				}
 			}
 			else if (strcmp(msg, "ready") == 0) {	// 모든플레이어가 시작준비가 되어야 게임을 시작한다.
-				reflex((char*)"ready", client_index);
+				reflex("ready", client_index);
 				readyCnt++;
 			}
 			else if (msg[0] == 'Q') {	// 최조 입력한 큐가 떨어지게 되면 큐정보를 보내어 추가해준다.

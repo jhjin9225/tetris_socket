@@ -145,37 +145,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Basic.c" />
+    <ClCompile Include="Blockes.c" />
+    <ClCompile Include="Initalize.c" />
+    <ClCompile Include="Interface.c" />
+    <ClCompile Include="Pages.c" />
+    <ClCompile Include="PlayingGame.c" />
+    <ClCompile Include="Queue.c" />
+    <ClCompile Include="SelectMulMode.c" />
     <ClCompile Include="Tetris_Main.c" />
-    <ClInclude Include="Tetris_Header.h" />
+    <ClCompile Include="Thread.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="basic.c">
-      <FileType>CppCode</FileType>
-    </ClCompile>
-    <ClCompile Include="SelectMulMode.c">
-      <FileType>CppCode</FileType>
-    </ClCompile>
-    <ClCompile Include="blockes.c">
-      <FileType>CppCode</FileType>
-    </ClCompile>
-    <ClCompile Include="pages.c">
-      <FileType>CppCode</FileType>
-    </ClCompile>
-    <ClCompile Include="initalize.c">
-      <FileType>CppCode</FileType>
-    </ClCompile>
-    <ClCompile Include="interface.c">
-      <FileType>CppCode</FileType>
-    </ClCompile>
-    <ClCompile Include="queue.c">
-      <FileType>CppCode</FileType>
-    </ClCompile>
-    <ClCompile Include="PlayingGame.c">
-      <FileType>CppCode</FileType>
-    </ClCompile>
-    <ClCompile Include="thread.c">
-      <FileType>CppCode</FileType>
-    </ClCompile>
+    <ClInclude Include="Tetris_Header.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

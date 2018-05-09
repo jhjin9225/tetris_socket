@@ -2,11 +2,11 @@
 
 
 // x,y위치에 int형변수 출력
-void putixy(int x, int y, const int d) { gotoxy(x, y); printf("%d", d); }
+void putixy(int x, int y, int d) { gotoxy(x, y); printf("%d", d); }
 // x,y위치에 string(*char)형변수 출력
-void putsxy(int x, int y, const char* c) { gotoxy(x, y); puts(c); }
+void putsxy(int x, int y, char* c) { gotoxy(x, y); puts(c); }
 // x,y위치에 cahr형변수 출력
-void putchxy(int x, int y, const char c) { gotoxy(x, y); _putch(c); }
+void putchxy(int x, int y, char c) { gotoxy(x, y); _putch(c); }
 
 // 화면을 모두 지운다.
 void clrscr() {

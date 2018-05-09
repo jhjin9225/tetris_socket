@@ -99,7 +99,6 @@ int winCnt = 0;
 int readyCnt = 0;
 int sockaddr_in_size;
 
-char message[100];
 char ip[20];
 char client_num;
 char playerName[3][50];
