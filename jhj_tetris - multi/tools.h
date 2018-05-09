@@ -137,7 +137,6 @@ void clearLine(int line);
 void txStageData();
 
 
-
 //basic_function.h
 void clrscr();
 void gotoxy(int x, int y);
@@ -151,7 +150,6 @@ void selectColor(int block);
 void putixy(int x, int y, int d);
 void putsxy(int x, int y, char* c);
 void putchxy(int x, int y, char c);
-void printB(int x, int y);
 
 //pages.h
 void configPage();
