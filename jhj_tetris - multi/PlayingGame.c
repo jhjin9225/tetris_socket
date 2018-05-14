@@ -30,7 +30,7 @@ void gameStart() {
 	}
 	else {
 		txSock("ready");	// 준비완료 문자를 보낸다.
-		while (readyCnt != clientCount) delay(1);	// 다른 플레이어가 준비될때까지 대기한다.
+		while (readyCnt != clientCount)	delay(1);	// 다른 플레이어가 준비될때까지 대기한다.
 	}
 	InitializeCriticalSection(&cs);	// 임계영역 설정
 	thread1 = (HANDLE)_beginthreadex(NULL, 0, (_beginthreadex_proc_type)autoDownBlock, NULL, 0, NULL);	// 시간에 따라 블럭이 떨어지는 쓰레드
@@ -211,6 +211,11 @@ void keyboardAction() {
 		}
 		break;
 
+	case ATTACK:
+		if (ISMULTI) {
+			txSock("ATTACK");
+		}
+		break;
 	}
 	if (dx != 0 || dy != 0) moveBlock(dx, dy);	// x, y 방향으로 이동했다면 블럭을 움직인다.
 	LeaveCriticalSection(&cs);

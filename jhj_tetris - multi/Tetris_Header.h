@@ -43,6 +43,7 @@
 #define STARTY 1
 #define MSG_X 42
 #define MSG_Y 16
+#define ATTACK 120 // 'x'
 
 #define RED (FOREGROUND_RED | FOREGROUND_INTENSITY)
 #define BLUE (FOREGROUND_BLUE | FOREGROUND_INTENSITY)
@@ -74,12 +75,13 @@
 #define ISSERVER (mode==0)
 #define ISCLIENT (mode==1)
 #define ISSINGLE (mode==2)
+#define ISMULTI	 (mode!=2)
 
 #define Q_MAX	200
 #define Q_FILL_SIZE	Q_MAX / 2
 
 
-//============구조체, 열거형============//
+//=============구조체, 열거형=============//
 
 typedef struct {
 	int element;
@@ -88,7 +90,7 @@ typedef struct {
 typedef struct {
 	int maxElementCount;	// 최대 원소갯수
 	int currentElementCount;	// 현재 원소 갯수
-	int front;	//제거할 자료르 ㄹ가리키는 포인터
+	int front;	//제거할 자료를 가리키는 포인터
 	int rear;	// 추가할 저료의 위치를 가리키는 포인터
 	ArrayQueueNode *pElement;
 }ArrayQueue;
@@ -128,7 +130,7 @@ void checkAllLine();
 void clearLine(int line);
 boolean checkWalls(int block, int motion, int dx, int dy);
 boolean checkPreViewWalls(int block, int motion, int x, int y, int dy);
-
+void attacked();
 
 //initialize.c
 void initMain();

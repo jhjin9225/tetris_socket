@@ -93,7 +93,7 @@ void turnBlock(boolean isRight) {
 	createBlock(save_x, save_y, save_block, next_motion);
 	saveBlock(save_x, save_y, save_block, next_motion);
 
-	if (!ISSINGLE)
+	if (ISMULTI)
 		txMovingBlock(save_x, save_y, save_block, save_motion); // 이동한 블럭을 서버에 보낸다.
 
 }
@@ -106,9 +106,9 @@ void createNewBlock() {
 		for (int i = 0; i < Q_FILL_SIZE; i++) {
 			newBlock.element = random(7);
 			enQueue(blockQueue, newBlock);
-			if (!ISSINGLE)	msg[i + 1] = newBlock.element + 0x30;	// 멀티모드일경우(싱글모드가 아닐경우)에는 서버에게 큐 데이터를 보낸다.
+			if (ISMULTI)	msg[i + 1] = newBlock.element + 0x30;	// 멀티모드일경우(싱글모드가 아닐경우)에는 서버에게 큐 데이터를 보낸다.
 		}
-		if (!ISSINGLE)	txSock(msg);
+		if (ISMULTI)	txSock(msg);
 	}
 
 	isBlockCreated = TRUE;
@@ -119,7 +119,7 @@ void createNewBlock() {
 	createBlock(STARTX, STARTY, newBlock, 0);
 	saveBlock(STARTX, STARTY, newBlock, 0);
 
-	if (!ISSINGLE)	// 멀티모드일때, 블록이동정보를 서버에 전송한다.
+	if (ISMULTI)	// 멀티모드일때, 블록이동정보를 서버에 전송한다.
 		txMovingBlock(STARTX, STARTY, newBlock, 0);
 
 	nextBlock[0] = nextBlock[1];	// 다음블록을 한칸씩 밀고 큐에서 새로운블록을 꺼낸다.
@@ -133,7 +133,6 @@ void createNewBlock() {
 			printGameOver();	// 게임오버 화면 출력
 		}
 		else {
-			readyCnt = 0;	//게임종료후 다시 게임시작을 대비해 0으로 초기화한다.
 			isStartGame = FALSE;
 			delay(50);
 			txSock("ILOOSE");	// 내가 졌다는 메세지를 서버에 전송
@@ -159,8 +158,8 @@ void moveBlock(int dx, int dy) {
 		createBlock(save_x + dx * 2, save_y + dy, save_block, save_motion);
 		saveBlock(save_x + dx * 2, save_y + dy, save_block, save_motion);
 
-		if (!ISSINGLE)
-			txMovingBlock(save_x, save_y, save_block, save_motion);	// 이동한 데이터를 상대방에게  보낸다.
+		if (ISMULTI)
+			txMovingBlock(save_x, save_y, save_block, save_motion);	// 이동한 데이터를 상대방에게 보낸다.
 
 	}
 }
@@ -211,7 +210,7 @@ void changeBlockToWalll() {
 	checkAllLine();
 	isBlockCreated = FALSE;
 
-	if (!ISSINGLE)
+	if (ISMULTI)
 		txStageData();
 }
 
@@ -317,3 +316,25 @@ boolean checkPreViewWalls(int block, int motion, int x, int y, int dy) {
 	return result;
 }
 
+void attacked() {
+	for (int i = 1; i < 20; i++)
+	{
+		for (int j = 1; j < 11; j++)
+		{
+				stage[i][j] = stage[i + 1][j];
+		}
+	}
+	for (int i = 1; i < 11; i++) {
+		stage[20][i] = random(7);
+	}
+	stage[20][random(10) + 1] = 8;
+	stage[20][random(10) + 1] = 8;
+	stage[20][random(10) + 1] = 8;
+
+	printStage();
+	createBlock(save_x, save_y, save_block, save_motion);
+	createPreViewBlock(save_x, save_y, save_block, save_motion);
+	
+	txStageData();
+	txMovingBlock(save_x, save_y, save_block, save_motion);
+}

@@ -31,6 +31,8 @@ void initMain() {
 
 // 게임시작전 필요한 것들을 초기화한다.
 void initGame() {
+	readyCnt = 0;
+
 	// 게임모드별 설정을 한다.
 	if (ISSINGLE || mode == -1) {
 		isStartGame = TRUE;
@@ -51,7 +53,7 @@ void initGame() {
 
 	printStage();	//블록이내려오는 곳을 출력한다.
 
-	if (!ISSINGLE) {
+	if (ISMULTI) {
 		printOtherPlayer();
 		winCnt = 0;
 	}

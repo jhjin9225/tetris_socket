@@ -75,10 +75,9 @@ void printStage() {
 	for (i = 0; i < 22; i++) {
 		gotoxy(16, i);
 		for (j = 0; j < 12; j++) {
-			selectColor(stage[i][j]);
 			if (stage[i][j] == 7) { setColor(WHITE); printf("в├"); }
 			else if (stage[i][j] == 8) printf("  ");
-			else printf("бс");
+			else { selectColor(stage[i][j]); printf("бс"); }
 		}
 	}
 }

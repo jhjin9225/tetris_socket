@@ -126,6 +126,10 @@ void serverRecvThread() {
 			else if (msg[0] == 'p') {	//플래이어의 이름을 받아온다.
 				strcpy(playerName[client_index], msg + 1);
 			}
+			else if (strcmp(msg, "ATTACK") == 0) {
+				reflex(msg, client_index);
+				attacked();
+			}
 
 			buf_idx = buf_idx + (int)strlen(buff + buf_idx) + 1;	// buf의 다음 문자열의 첫글자 선택
 		}
@@ -269,7 +273,10 @@ void clientRecvThread() {
 					point = point + (int)strlen(msg + point) + 1;
 				}
 			}
-		
+			else if (strcmp(msg, "ATTACK") == 0) {
+				attacked();
+			}
+
 			buf_idx = buf_idx + (int)strlen(buff + buf_idx) + 1;
 		}
 		memset(msg, 0, sizeof(msg));	// 초기화

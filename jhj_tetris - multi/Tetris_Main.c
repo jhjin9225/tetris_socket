@@ -132,10 +132,10 @@ HANDLE serverThread[3], clientThread;
 
 
 int main(void) {
-
+	
 	initMain();
 	printMainPage();
-
+	
 	return 0;
 }
 
