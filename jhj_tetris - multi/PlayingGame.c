@@ -7,6 +7,7 @@ extern int leveltime;
 extern int clientCount;
 extern int mode;
 extern int readyCnt;
+extern int attackCnt;
 extern char myName[50];
 extern boolean isStartGame;
 extern boolean isTurnMode;
@@ -212,7 +213,10 @@ void keyboardAction() {
 		break;
 
 	case ATTACK:
-		if (ISMULTI) {
+		if (ISMULTI && attackCnt > 0) {
+			attackCnt--;
+			putchxy(ATTACK_X + 0, ATTACK_Y, attackCnt / 10 + 0x30);
+			putchxy(ATTACK_X + 1, ATTACK_Y, attackCnt % 10 + 0x30);
 			txSock("ATTACK");
 		}
 		break;

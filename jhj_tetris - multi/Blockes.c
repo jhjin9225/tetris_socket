@@ -15,6 +15,7 @@ extern int holdBlock;
 extern int holdMotion;
 extern int stage[22][12];
 extern int combo;
+extern int attackCnt;
 extern boolean isPreViewMode;
 extern boolean isBlockCreated;
 extern boolean isStartGame;
@@ -233,14 +234,14 @@ void checkAllLine() {
 	}
 	if (count == 0) {	// 한줄도 못지우면 콤보초기와 및 5점추가
 		combo = 0;
-		score += 5;
+		addScore(5);
 		printInfo();
 	}
 	if (count == 1) combo = combo > 6 ? 6 : combo + 1;	// 한줄지우면 콤보증가한다. 최대콤보 6.
 
 	if (count > 1) {	//2줄 이상 지우면
 		combo = combo > 6 ? 6 : combo + 1;
-		score += count * 100;	
+		addScore(count * 100);
 
 		setColor(WHITE);	// 점수 추가
 		EnterCriticalSection(&cs);
@@ -251,7 +252,7 @@ void checkAllLine() {
 			setColor(PINK);
 			gotoxy(MSG_X, MSG_Y + 4); printf("테트리스!!");
 			gotoxy(MSG_X, MSG_Y + 5); printf("+%d", 300);
-			score += 300;
+			addScore(300);
 		}
 		LeaveCriticalSection(&cs);
 		msgState = TRUE;	// 점수 표시후, 스레드에서 일정시간이 지나면 점수표시가 사라지게한다.
@@ -268,7 +269,7 @@ void checkAllLine() {
 		case 6: setColor(YELLOW);  printf("FANTASTIC!!!!"); comboBonus = 1000; break;
 		}
 		gotoxy(MSG_X, MSG_Y + 3); printf("+%d", comboBonus);
-		score += comboBonus;
+		addScore(comboBonus);
 		msgState = TRUE;
 		printInfo();
 	}
@@ -283,7 +284,7 @@ void clearLine(int line) {
 			stage[i][j] = 8;
 		}
 	}
-	score += 100;
+	addScore(100);
 	printInfo();
 	printStage();
 }
@@ -337,4 +338,19 @@ void attacked() {
 	
 	txStageData();
 	txMovingBlock(save_x, save_y, save_block, save_motion);
+}
+
+void addScore(int sc) {
+	int index = score / 300 + 1;
+
+	score += sc;
+
+	if (ISMULTI) {
+		//if (score > 300 * index) {
+		if (score >= index * 300) {
+			attackCnt++;
+			putchxy(ATTACK_X + 0, ATTACK_Y, attackCnt / 10 + 0x30);
+			putchxy(ATTACK_X + 1, ATTACK_Y, attackCnt % 10 + 0x30);
+		}
+	}
 }

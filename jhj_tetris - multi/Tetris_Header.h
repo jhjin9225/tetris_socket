@@ -80,6 +80,10 @@
 #define Q_MAX	200
 #define Q_FILL_SIZE	Q_MAX / 2
 
+#define ATTACK_X 7
+#define ATTACK_Y 14
+
+
 
 //=============구조체, 열거형=============//
 
@@ -131,6 +135,8 @@ void clearLine(int line);
 boolean checkWalls(int block, int motion, int dx, int dy);
 boolean checkPreViewWalls(int block, int motion, int x, int y, int dy);
 void attacked();
+void addScore(int sc);
+
 
 //initialize.c
 void initMain();

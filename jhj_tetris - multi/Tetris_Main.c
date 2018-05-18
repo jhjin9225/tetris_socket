@@ -98,6 +98,7 @@ int mode = -1;
 int winCnt = 0;
 int readyCnt = 0;
 int sockaddr_in_size;
+int attackCnt=0;
 
 char ip[20];
 char client_num;
@@ -132,7 +133,7 @@ HANDLE serverThread[3], clientThread;
 
 
 int main(void) {
-	
+
 	initMain();
 	printMainPage();
 	

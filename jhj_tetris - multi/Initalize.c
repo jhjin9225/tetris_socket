@@ -14,6 +14,7 @@ extern int clientCount;
 extern int mode;
 extern int winCnt;
 extern int readyCnt;
+extern int attackCnt;
 extern char myName[50];
 extern boolean isBlockCreated;
 extern boolean isStartGame;
@@ -66,6 +67,12 @@ void initGame() {
 	setColor(WHITE);
 	putsxy(28 - (int)(strlen(myName) / 2), 22, myName);	// 사용자의 이름을 출력한다.
 
+	if (ISMULTI) {
+		putsxy(ATTACK_X - 5, ATTACK_Y-1, "공격가능횟수");
+		putchxy(ATTACK_X + 0, ATTACK_Y, attackCnt / 10 + 0x30);
+		putchxy(ATTACK_X + 1, ATTACK_Y, attackCnt % 10 + 0x30);
+	}
+
 }
 
 // 블럭을 초기화한다.
@@ -79,6 +86,8 @@ void initBlock() {
 	score = 0;
 	leveltime = 1000;
 	isBlockCreated = FALSE;
+	attackCnt=0;
+
 }
 
 // 생성될 블럭들을 Queue에 담아 초기화한다.

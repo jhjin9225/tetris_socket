@@ -35,8 +35,8 @@ void server(int playerCnt) {
 	// 소켓주소 설정
 	memset(&listen_addr, 0, sizeof(listen_addr));
 	listen_addr.sin_family = AF_INET;	//통신방싱 : TCP/IP
-	listen_addr.sin_addr.S_un.S_addr = htonl(INADDR_ANY);	// 서버 주소 설정 : 127.0.0.1(localhost)
-//	listen_addr.sin_addr.S_un.S_addr = htonl(ntohl(inet_addr(GetDefaultMyIP_str())));	// 서버 주소 설정
+//	listen_addr.sin_addr.S_un.S_addr = htonl(INADDR_ANY);	// 서버 주소 설정 : 127.0.0.1(localhost)
+	listen_addr.sin_addr.S_un.S_addr = htonl(ntohl(inet_addr(GetDefaultMyIP_str())));	// 서버 주소 설정
 	listen_addr.sin_port = htons(PORT);	// 포트 : PORT(1234)inet_ntoa(addr)
 
 	// 소켓 바인드
@@ -127,8 +127,7 @@ void client() {
 		return;
 	}
 
-//	setColor(WHITE);	printf("서버의 아이피주소를 입력하세요 : ");	scanf("%s", &ip);
-	strcpy(ip, "127.0.0.1");
+	setColor(WHITE);	printf("서버의 아이피주소를 입력하세요 : ");	scanf("%s", &ip);
 
 	memset(&client_addr, 0, sizeof(client_addr));
 	client_addr.sin_family = AF_INET;
